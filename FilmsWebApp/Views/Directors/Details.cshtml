@@ -1,0 +1,64 @@
+﻿@model Director
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Director's info</h1>
+
+<style>
+    .left {
+        float: left;
+        width: 50%;
+    }
+</style>
+
+<div class="left">
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(d => d.DirectorName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(d => d.DirectorName)
+        </dd>
+    </dl>
+
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Film count
+        </dt>
+        <dd class = "col-sm-10">
+            @ViewBag.Count
+        </dd>
+    </dl>
+</div>
+
+<style>
+    .right {
+        float: right;
+        width: 33%;
+    }
+</style>
+
+<div class="right">
+    <dl class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(d=>d.Films)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var film in Model.Films)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Films" asp-action="Details" asp-route-id="@film.FilmId">@Html.DisplayFor(f=>film.Title)</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </dl>
+</div>

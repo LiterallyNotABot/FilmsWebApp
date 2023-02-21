@@ -1,0 +1,25 @@
+﻿@model IQueryable<Actor>
+
+@{
+    ViewData["Title"] = "Actor's Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h3>@typeof(Actor).Name</h3> @*we get the name of the table from the very same model*@
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var actor in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@actor.ActorId">@Html.DisplayFor(modelItem => actor.ActorName)</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

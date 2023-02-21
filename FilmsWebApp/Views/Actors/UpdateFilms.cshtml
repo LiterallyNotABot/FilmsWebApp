@@ -1,0 +1,81 @@
+﻿@model FilmsWebApp.Models.ViewModel.ActorsUpdateFilmsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Filmography</h1>
+
+<style>
+    .right {
+        float: right;
+        width: 50%;
+    }
+</style>
+
+<style>
+    .left {
+        float: left;
+        width: 50%;
+    }
+</style>
+
+<div>
+    <div class="left">
+        <div class="align-content-center">@Html.DisplayFor(m=>m.actor.ActorName)'s filmography</div>
+        <dl class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Film</th>
+                        <th>Director</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var film in Model.bindedFilms)
+                    {
+                        <tr>
+                            <td>
+                                <a asp-controller="Films" asp-action="Details" asp-route-id="@film.FilmId">@Html.DisplayFor(f=>film.Title)</a>
+                            </td>
+                            <td>
+                                <a asp-controller="Directors" asp-action="Details" asp-route-id="@film.Director.DirectorTableId">@Html.DisplayFor(d=>film.Director.DirectorName)</a>
+                            </td>
+                            <td>
+                                <a asp-action="Unbind" asp-route-id="@film.FilmId" class="btn btn-outline-danger">Unbind</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </dl>
+    </div>
+
+</div>
+
+<div class="right">
+    <div class="right">
+        <h3>Add a film:</h3>
+        <form asp-action="Bind" asp-route-id="@Model.ActorId">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FilmId" class="control-label"></label>
+                <select asp-for="FilmId" class="form-control" asp-items="ViewBag.Unbinded"></select>
+                <span asp-validation-for="FilmId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="@Model.actor.ActorId" />
+            <input type="hidden" asp-for="@Model.actor" />
+            <input type="hidden" asp-for="@Model.bindedFilms" />
+            <div class="form-group">
+                <input type="submit" value="Bind" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

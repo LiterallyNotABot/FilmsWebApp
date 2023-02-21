@@ -1,0 +1,109 @@
+﻿@using FilmsWebApp.Models.ViewModel
+@model SearchViewModel
+
+@{ViewData["Title"] = "Search";}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Search">
+            <p>
+                Search for a title, an actor, a director, or a genre: <input type="text" name="SearchString" />
+                <br />
+                <input type="submit" value="Search"/>
+            </p>
+        </form>
+    </div>
+</div>
+
+@if (Model != null)
+{
+    <style>
+        .left {
+            float: left;
+            width: 33%;
+        }
+    </style>
+     
+    <h2>Results:</h2>
+    <br />
+
+        if (Model.filmSet.Any())
+        {
+            <div class="left">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Films</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var film in Model.filmSet)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="Films" asp-action="Details" asp-route-id="@film.FilmId">
+                                        @Html.DisplayFor(f=>film.Title)
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        if (Model.directorSet.Any())
+        {
+            <div class="left">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Directors</th>                          
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var director in Model.directorSet)
+                    {   <tr>
+                            <td>
+                                <a asp-controller="Directors" asp-action="Details" asp-route-id="@director.DirectorTableId">
+                                     @Html.DisplayFor(d=>director.DirectorName)
+                                 </a>
+                            </td>
+                        </tr>
+                    }               
+                    </tbody>
+                </table>
+            </div>
+        }
+
+        if (Model.actorSet.Any())
+        {
+            <div class="left">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Actors</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var actor in Model.actorSet)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.ActorId">
+                                        @Html.DisplayFor(a=>actor.ActorName)
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    
+}
+
+@if (ViewBag.Message != null)
+{
+    <h6>@ViewBag.Message</h6>
+}

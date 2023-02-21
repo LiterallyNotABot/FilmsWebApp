@@ -1,0 +1,36 @@
+﻿@model IQueryable<Director>
+
+@{
+    ViewData["Title"] = "Director's Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>     
+                <h3>@typeof(Director).Name</h3> @*we get the name of the table from the very same model*@
+            </th>
+            <th>
+                <a asp-action="Create" class="btn btn-success">Add a director</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var director in Model)
+        {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@director.DirectorTableId">@Html.DisplayFor(modelItem => director.DirectorName)</a>
+                    </td>
+                    <td>
+                    <a asp-action="Edit" asp-route-id="@director.DirectorTableId" class="btn btn-warning">
+                        Edit
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@director.DirectorTableId class=" btn btn-danger"">
+                        Delete
+                    </a>
+                </td>
+                </tr>
+        }
+    </tbody>
+</table>

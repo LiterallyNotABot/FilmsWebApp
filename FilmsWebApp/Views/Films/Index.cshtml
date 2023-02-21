@@ -1,0 +1,43 @@
+﻿@using FilmsWebApp.Models.ViewModel;
+@model List<FilmsWebApp.Models.ViewModel.FilmsIndexViewModel>
+
+@{
+    ViewData["Title"] = "Film's Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h3>Title</h3>
+            </th>
+            <th>
+                <h3>@typeof(Director).Name</h3>
+            </th>
+            <th>
+                <h3>Cast</h3>
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var set in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@set.Film.FilmId">@Html.DisplayFor(modelItem => set.Film.Title)</a>
+                </td>
+                <td>
+                    <a asp-controller="Directors" asp-action="Details" asp-route-id="@set.Director.DirectorTableId">@Html.DisplayFor(modelItem => set.Director.DirectorName)</a>
+                </td>
+                 <td>
+                    @foreach (var actor in set.Actors)
+                    {
+                        <a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.ActorId">@Html.DisplayFor(modelItem => actor.ActorName)</a>
+                        <br />
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

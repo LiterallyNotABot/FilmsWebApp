@@ -1,0 +1,39 @@
+﻿@model IQueryable<Actor>
+
+@{
+    ViewData["Title"] = "Actor's Index";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <h3>@typeof(Actor).Name</h3> @*we get the name of the table from the very same model*@
+            </th>
+            <th>
+                <a asp-action="Create" class="btn btn-success">Add an actor</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var actor in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@actor.ActorId">@Html.DisplayFor(a=>actor.ActorName)</a>
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@actor.ActorId" class="btn btn-warning">
+                        Edit
+                    </a>                              
+                    <a asp-action="UpdateFilms" asp-route-id="@actor.ActorId" class="btn btn-primary">
+                        Update filmography
+                    </a>               
+                    <a asp-action="Delete" asp-route-id="@actor.ActorId" class="btn btn-danger">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
