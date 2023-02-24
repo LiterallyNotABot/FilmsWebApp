@@ -242,5 +242,111 @@ namespace FilmsWebApp.Controllers
             return _context.Films.Any(f => f.FilmId == id);
         }
 
+         public async Task<IActionResult> UpdateCast(int? id)
+        {
+            if (id == null || _context.Actors == null)
+            {
+                return NotFound();
+            }
+
+            var film = await _context.Films.FindAsync(id);
+
+            if (film == null)
+            {
+                return NotFound();
+            }
+
+            film.Director = await _context.Directors.FindAsync(film.DirectorId);
+
+            var castQuery = _context.FilmsAndActors.Where(fa => fa.FilmIdFk == film.FilmId)
+                            .Join(_context.Actors, fa => fa.ActorIdFk, a => a.ActorId, (fa, a) => a);
+
+            var restOfActorsQuery = _context.Actors.Where(a => !castQuery.Contains(a));
+
+            IEnumerable<Actor> mylist = castQuery.ToList();
+
+            FilmsUpdateCastViewModel filmVM = new FilmsUpdateCastViewModel()
+            {
+                film = film,
+                cast = mylist,
+            };
+
+            ViewData["Unbinded"] = new SelectList(restOfActorsQuery, "ActorId", "ActorName");
+            return View(filmVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Bind(int id, [Bind("film,cast,ActorId")] FilmsUpdateCastViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                if (model.ActorId != null)
+                {
+                    
+                        FilmsAndActor newBinding = new FilmsAndActor()
+                        {
+                             FilmIdFk = model.film.FilmId,
+                             ActorIdFk = (int)model.ActorId
+                        }; 
+
+                    var verif = _context.FilmsAndActors.Any(r => r.FilmIdFk == newBinding.FilmIdFk &&
+                                r.ActorIdFk == newBinding.ActorIdFk);
+
+                    if (!verif)
+                    {
+                        _context.FilmsAndActors.Add(newBinding);
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+            }
+
+            return RedirectToAction(nameof(UpdateIndex));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Unbind(int id, [Bind("film,ActorId,cast")] FilmsUpdateCastViewModel model)
+        {
+            if (id != null)
+            {
+                model.ActorId = id;
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                FilmsAndActor newUnbinding = new FilmsAndActor()
+                {
+                    FilmIdFk = model.film.FilmId,
+                    ActorIdFk = model.ActorId
+                };
+
+                var pkRecord = _context.FilmsAndActors.Where(r => r.FilmIdFk == newUnbinding.FilmIdFk
+                            && r.ActorIdFk == newUnbinding.ActorIdFk).Select(r => r.TableId)
+                            .FirstOrDefault();
+
+                if (pkRecord != null)
+                {
+                    newUnbinding.TableId = pkRecord;
+                    _context.FilmsAndActors.Remove(newUnbinding);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+            }
+            return RedirectToAction(nameof(UpdateIndex));
+        }
+
+        private bool FilmExists(int id)
+        {
+            return _context.Films.Any(f => f.FilmId == id);
+        }
+
     }
 }
