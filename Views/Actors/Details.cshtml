@@ -1,0 +1,68 @@
+﻿@model FilmsWebApp.Models.ViewModel.ActorsDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Actor's info</h1>
+
+<style>
+    .left {
+        float: left;
+        width: 33%;
+    }
+</style>
+
+<div class="left">
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(a => a.actor.ActorName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(a => a.actor.ActorName)
+        </dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            Film count
+        </dt>
+        <dd class="col-sm-10">
+            @ViewBag.Count
+        </dd>
+    </dl>
+</div>
+
+<style>
+    .right {
+        float: right;
+        width: 66%;
+    }
+</style>
+
+<div class="right">
+    <dl class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Films</th>
+                    <th>Director</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var film in Model.filmography)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Films" asp-action="Details" asp-route-id="@film.FilmId">@Html.DisplayFor(f=>film.Title)</a>
+                        </td>
+                        <td>
+                            <a asp-controller="Directors" asp-action="Details" asp-route-id="@film.Director.DirectorTableId">@Html.DisplayFor(d=>film.Director.DirectorName)</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </dl>
+</div>

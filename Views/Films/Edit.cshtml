@@ -1,0 +1,57 @@
+﻿@model FilmsWebApp.Models.ViewModel.FilmsEditViewModel
+
+@{
+    ViewData["Title"] = "Edit Film";
+}
+
+<h1>Edit</h1>
+
+<h4>Film</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (ViewBag.Coincidence != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.Coincidence
+                </div>
+            }
+            <div class="form-group">
+                <label asp-for="@Model.Title" class="control-label"></label>
+                <input asp-for="@Model.Title" class="form-control" />
+                <span asp-validation-for="@Model.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Genre" class="control-label"></label>
+                <input asp-for="@Model.Genre" class="form-control" />
+                <span asp-validation-for="@Model.Genre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.directorTableId" class="control-label"></label>
+                <select asp-for="@Model.directorTableId" class="form-control" asp-items="ViewBag.Directors"></select>
+                <span asp-validation-for="@Model.directorTableId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="@Model.FilmId" />
+            <div class="form-group">
+                <label asp-for="@Model.ReleaseYear" class="control-label"></label>
+                <input asp-for="@Model.ReleaseYear" class="form-control" />
+                <span asp-validation-for="@Model.ReleaseYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="UpdateIndex">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

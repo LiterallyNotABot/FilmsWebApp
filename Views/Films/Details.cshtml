@@ -1,0 +1,89 @@
+﻿@model FilmsWebApp.Models.ViewModel.FilmsDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Film's info</h1>
+
+<style>
+    .left {
+        float: left;
+        width: 50%;
+    }
+</style>
+
+<div class="left">
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.film.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.film.Title)
+        </dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.film.Director.DirectorName)
+        </dt>
+        <dd class="col-sm-10">
+            <a asp-controller="Directors" asp-action="Details" asp-route-id="@Model.film.Director.DirectorTableId">@Html.DisplayFor(model => model.film.Director.DirectorName)</a>
+        </dd>
+    </dl>
+
+    @if (@Model.film.Genre != null)
+    {
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.film.Genre)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.film.Genre)
+            </dd>
+        </dl>
+    }
+
+    @if (@Model.film.ReleaseYear != null)
+    {
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.film.ReleaseYear)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.film.ReleaseYear)
+            </dd>
+        </dl>
+    }
+</div>
+
+<style>
+    .right 
+    {
+        float: right;
+        width: 33%;
+    }
+ </style>
+
+<div class="right">
+    <dl class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(m=>m.Cast)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var actor in Model.Cast)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Actors" asp-action="Details" asp-route-id="@actor.ActorId">@Html.DisplayFor(a=>actor.ActorName)</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </dl>
+</div>
